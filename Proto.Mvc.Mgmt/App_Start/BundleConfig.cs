@@ -22,10 +22,16 @@ namespace Proto.Mvc.Mgmt
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
 
+            // need to add back bootstrap-responsive.css file to the content dir
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css",
-                      "~/Content/bootstrap-responsive.css"));
+                        "~/Content/bootstrap.css",
+                        "~/Content/bootstrap-theme.css",
+                        "~/Content/site.css",
+                        "~/Content/bootstrap-responsive.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/oldIEBrowsersSupport").Include(
+                        "~/Scripts/respond.js",
+                        "~/Scripts/html5shiv.js"));
         }
     }
 }
