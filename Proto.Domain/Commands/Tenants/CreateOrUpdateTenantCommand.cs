@@ -1,4 +1,6 @@
 ﻿
+using Proto.Model.Entities;
+
 namespace Proto.Domain.Commands.Tenants
 {
     public class CreateOrUpdateTenantCommand
@@ -18,12 +20,16 @@ namespace Proto.Domain.Commands.Tenants
         public string State { get; set; }
         public string Zip { get; set; }
         public System.Guid RowGuid { get; set; }
-        public System.DateTime ModifiedDate { get; set; }
-        public int ContactTypeId { get; set; }	
-
-        //public Tenant Tenant { get; set; }
-
-        //output property
-        //public int TenantId { get; set; }
+        public string LastModifiedBy { get; set; }
+        public int ContactTypeId { get; set; }
+ 
+        // In surrport of Concurrency Exception and other failures
+        public byte[] RowVersion { get; set; }
+        public Tenant DatabaseValues { get; set; } 
+        public Tenant ClientValues { get; set; }
+        public bool SaveFailed { get; set; }
+        public bool ConcurrencyException { get; set; }
+        //public bool DataException { get; set; }
+        //public bool OtherException { get; set; }
     }
 }

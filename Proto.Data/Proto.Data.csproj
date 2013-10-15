@@ -32,10 +32,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework">
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.0.0-rc1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework.SqlServer">
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.0.0-rc1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="SimpleInjector">
@@ -62,6 +64,14 @@
     <Compile Include="Migrations\201309241551022_Init.cs" />
     <Compile Include="Migrations\201309241551022_Init.Designer.cs">
       <DependentUpon>201309241551022_Init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201310142214250_RowVersion.cs" />
+    <Compile Include="Migrations\201310142214250_RowVersion.Designer.cs">
+      <DependentUpon>201310142214250_RowVersion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201310150028415_Tenant.LastModifiedBy.cs" />
+    <Compile Include="Migrations\201310150028415_Tenant.LastModifiedBy.Designer.cs">
+      <DependentUpon>201310150028415_Tenant.LastModifiedBy.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -118,6 +128,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201309241551022_Init.resx">
       <DependentUpon>201309241551022_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201310142214250_RowVersion.resx">
+      <DependentUpon>201310142214250_RowVersion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201310150028415_Tenant.LastModifiedBy.resx">
+      <DependentUpon>201310150028415_Tenant.LastModifiedBy.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

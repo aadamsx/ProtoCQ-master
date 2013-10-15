@@ -30,7 +30,9 @@ namespace Proto.Model.Entities
         public Address BillingAddress { get; set; }
 
         public Guid RowGuid { get; set; }
-        public DateTime ModifiedDate { get; set; }
+
+        public string LastModifiedBy { get; set; }
+        public Byte[] RowVersion { get; set; }
 
         // ...
 

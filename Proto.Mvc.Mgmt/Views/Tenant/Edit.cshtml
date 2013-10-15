@@ -16,6 +16,9 @@
 
         @Html.HiddenFor(model => model.TenantId)
         
+        <!-- optimistic concurrency -->
+        @Html.HiddenFor(model => model.RowVersion)
+
         <div class="control-group">
             @Html.LabelFor(model => model.Name, new { @class = "control-label" })
             <div class="controls">
@@ -116,8 +119,6 @@
         </div>
 
         @Html.HiddenFor(model => model.RowGuid)
-
-        @Html.HiddenFor(model => model.ModifiedDate)
 
         @Html.HiddenFor(model => model.ContactTypeId)
 

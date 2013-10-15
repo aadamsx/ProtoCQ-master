@@ -26,11 +26,10 @@ warning 6002: The table/view 'ClientManagementContext.dbo.AllTenants' does not h
           <Property Name="State" Type="nvarchar" MaxLength="2" />
           <Property Name="Zip" Type="nvarchar" MaxLength="10" />
           <Property Name="RowGuid" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
           <Property Name="ContactTypeId" Type="int" Nullable="false" />
+          <Property Name="RowVersion" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="LastModifiedBy" Type="nvarchar(max)" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'ClientManagementContext.dbo.CurrentTenants' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityContainer Name="ClientManagementContextQueryModelStoreContainer">
           <EntitySet Name="AllTenants" EntityType="Self.AllTenants" p3:Type="Views" p3:Schema="dbo" xmlns:p3="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator">
             <DefiningQuery>SELECT 
@@ -49,8 +48,9 @@ warning 6002: The table/view 'ClientManagementContext.dbo.CurrentTenants' does n
     [AllTenants].[State] AS [State], 
     [AllTenants].[Zip] AS [Zip], 
     [AllTenants].[RowGuid] AS [RowGuid], 
-    [AllTenants].[ModifiedDate] AS [ModifiedDate], 
-    [AllTenants].[ContactTypeId] AS [ContactTypeId]
+    [AllTenants].[ContactTypeId] AS [ContactTypeId], 
+    [AllTenants].[RowVersion] AS [RowVersion], 
+    [AllTenants].[LastModifiedBy] AS [LastModifiedBy]
     FROM [dbo].[AllTenants] AS [AllTenants]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
@@ -80,8 +80,9 @@ warning 6002: The table/view 'ClientManagementContext.dbo.CurrentTenants' does n
           <Property Name="State" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
           <Property Name="Zip" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="RowGuid" Type="Guid" Nullable="false" />
-          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ContactTypeId" Type="Int32" Nullable="false" />
+          <Property Name="RowVersion" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="LastModifiedBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -92,8 +93,9 @@ warning 6002: The table/view 'ClientManagementContext.dbo.CurrentTenants' does n
           <EntitySetMapping Name="AllTenants">
             <EntityTypeMapping TypeName="ClientManagementContextQueryModel.AllTenants">
               <MappingFragment StoreEntitySet="AllTenants">
+                <ScalarProperty Name="LastModifiedBy" ColumnName="LastModifiedBy" />
+                <ScalarProperty Name="RowVersion" ColumnName="RowVersion" />
                 <ScalarProperty Name="ContactTypeId" ColumnName="ContactTypeId" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
                 <ScalarProperty Name="RowGuid" ColumnName="RowGuid" />
                 <ScalarProperty Name="Zip" ColumnName="Zip" />
                 <ScalarProperty Name="State" ColumnName="State" />

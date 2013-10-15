@@ -19,6 +19,10 @@ namespace Proto.Data.Configuration
             Property(t => t.PrimaryContactPhone).HasMaxLength(25).IsRequired();
             Property(t => t.OfficePhone).HasMaxLength(25).IsRequired();
 
+            Property(t => t.RowVersion)
+                .IsRowVersion();
+                //.IsConcurrencyToken();
+
             // Relations
             HasRequired(t => t.Type)
                 .WithMany(t => t.Tenants)

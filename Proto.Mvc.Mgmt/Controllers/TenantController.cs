@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
 using AutoMapper;
@@ -73,6 +74,8 @@ namespace Proto.Mvc.Mgmt.Controllers
                 return RedirectToAction("Index");
             }
 
+            // NOTE: see if the ID on the new Entity is in the TenantViewModel here.  
+            // It is set after at the end of db.SaveChanges by assigning the value back to the command
             return View(tenant);
         }
 
@@ -93,12 +96,84 @@ namespace Proto.Mvc.Mgmt.Controllers
 		// Example: public ActionResult Update([Bind(Include="ExampleProperty1,ExampleProperty2")] Model model)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(TenantViewModel tenant)
+        public ActionResult Edit(
+            //[Bind(Include = "TenantId, Name, PrimaryContactFirstName, PrimaryContactLastName, " + 
+            //    "PrimaryContactPhone, Description, Email, OfficePhone, RowVersion")]
+            TenantViewModel tenant)
         {
             if (ModelState.IsValid)
             {
                 var command = Mapper.Map<TenantViewModel, CreateOrUpdateTenantCommand>(tenant);
+                command.LastModifiedBy = User.Identity.Name;
                 createOrUpdateTenantHandler.Handle(command);
+
+                if (command.SaveFailed && command.ConcurrencyException)
+                {
+                    if (command.DatabaseValues.Name != command.ClientValues.Name)
+                        ModelState.AddModelError("Name", "Current value: "
+                            + command.DatabaseValues.Name);
+
+                    if (command.DatabaseValues.Active != command.ClientValues.Active)
+                        ModelState.AddModelError("Active", "Current value: "
+                            + command.DatabaseValues.Active);
+
+                    if (command.DatabaseValues.PrimaryContactFirstName != command.ClientValues.PrimaryContactFirstName)
+                        ModelState.AddModelError("PrimaryContactFirstName", "Current value: "
+                            + command.DatabaseValues.PrimaryContactFirstName);
+
+                    if (command.DatabaseValues.PrimaryContactLastName != command.ClientValues.PrimaryContactLastName)
+                        ModelState.AddModelError("PrimaryContactLastName", "Current value: "
+                            + command.DatabaseValues.PrimaryContactLastName);
+
+                    if (command.DatabaseValues.PrimaryContactPhone != command.ClientValues.PrimaryContactPhone)
+                        ModelState.AddModelError("PrimaryContactPhone", "Current value: "
+                            + command.DatabaseValues.PrimaryContactPhone);
+
+                    if (command.DatabaseValues.Description != command.ClientValues.Description)
+                        ModelState.AddModelError("Description", "Current value: "
+                            + command.DatabaseValues.Description);
+
+                    if (command.DatabaseValues.Email != command.ClientValues.Email)
+                        ModelState.AddModelError("Email", "Current value: "
+                            + command.DatabaseValues.Email);
+
+                    if (command.DatabaseValues.OfficePhone != command.ClientValues.OfficePhone)
+                        ModelState.AddModelError("OfficePhone", "Current value: "
+                            + command.DatabaseValues.OfficePhone);
+
+                    if (command.DatabaseValues.BillingAddress.City != command.ClientValues.BillingAddress.City)
+                        ModelState.AddModelError("City", "Current value: "
+                            + command.DatabaseValues.BillingAddress.City);
+
+                    if (command.DatabaseValues.BillingAddress.State != command.ClientValues.BillingAddress.State)
+                        ModelState.AddModelError("State", "Current value: "
+                            + command.DatabaseValues.BillingAddress.State);
+
+                    if (command.DatabaseValues.BillingAddress.Street != command.ClientValues.BillingAddress.Street)
+                        ModelState.AddModelError("Street", "Current value: "
+                            + command.DatabaseValues.BillingAddress.Street);
+
+                    if (command.DatabaseValues.BillingAddress.Zip != command.ClientValues.BillingAddress.Zip)
+                        ModelState.AddModelError("Zip", "Current value: "
+                            + command.DatabaseValues.BillingAddress.Zip);
+
+                    ModelState.AddModelError(string.Empty, "The record you attempted to edit "
+                        + "was modified by another user after you got the original value. The "
+                        + "edit operation was canceled and the current values in the database "
+                        + "have been displayed. If you still want to edit this record, click "
+                        + "the Save button again. Otherwise click the Back to List hyperlink.");
+
+                    tenant.RowVersion = command.RowVersion;
+
+                    return View(tenant);
+                }
+                else if (command.SaveFailed)
+                {
+                    //Log the error (uncomment dex variable name after DataException and add a line here to write a log.
+                    ModelState.AddModelError(string.Empty, "Unable to save changes. Try again, and if the problem persists contact your system administrator.");
+                    
+                    return View(tenant);
+                }
 
                 return RedirectToAction("Index");
             }
@@ -127,7 +202,7 @@ namespace Proto.Mvc.Mgmt.Controllers
 
         //protected override void Dispose(bool disposing)
         //{
-        //    db.Dispose();
+        //    //db.Dispose();
         //    base.Dispose(disposing);
         //}
     }

@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="697cf172f6504e41a9e61137e50cd532" Name="Diagram1">
-        <EntityTypeShape EntityType="ClientManagementContextQueryModel.AllTenants" Width="1.5" PointX="4" PointY="1.125" />
+        <EntityTypeShape EntityType="ClientManagementContextQueryModel.AllTenants" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
