@@ -29,7 +29,9 @@ namespace Proto.Domain.Commands.Tenants
         public Tenant ClientValues { get; set; }
         public bool SaveFailed { get; set; }
         public bool ConcurrencyException { get; set; }
-        //public bool DataException { get; set; }
-        //public bool OtherException { get; set; }
+        public bool DataException { get; set; }
+        public bool UpdateException { get; set; }
+        public bool NullRefException { get; set; }
+        public bool OtherException { get; set; }
     }
 }

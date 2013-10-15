@@ -77,6 +77,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Commands\Employees\" />
+    <Folder Include="Commands\Orders\" />
+    <Folder Include="Commands\Products\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

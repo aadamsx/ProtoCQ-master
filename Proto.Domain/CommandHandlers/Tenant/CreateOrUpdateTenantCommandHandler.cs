@@ -5,6 +5,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 using Proto.Data.Command;
+using Proto.Data.Infrastructure;
 using Proto.Domain.Commands.Tenants;
 using Proto.Model.Entities;
 
@@ -59,6 +60,9 @@ namespace Proto.Domain.CommandHandlers.Tenant
             db.Configuration.AutoDetectChangesEnabled = false;
             db.Configuration.ValidateOnSaveEnabled = false;
 
+            // Enable retry logic for certain operations
+            //ContextConfiguration.SuspendExecutionStrategy = false;
+
             // unsure whether an object has been added or modified
             // You need to take these actions on all of the objects being added/modified, 
             // so if this object is complex and has other objects that need to be updated 
@@ -98,6 +102,11 @@ namespace Proto.Domain.CommandHandlers.Tenant
             {
                 db.SaveChanges();
             }
+            catch (NullReferenceException)
+            {
+                command.SaveFailed = true;
+                command.NullRefException = true;
+            }
             catch (DbUpdateConcurrencyException ex)
             {
                 command.SaveFailed = true;
@@ -109,15 +118,28 @@ namespace Proto.Domain.CommandHandlers.Tenant
                 command.DatabaseValues = (Model.Entities.Tenant) entry.GetDatabaseValues().ToObject();
                 command.RowVersion = command.DatabaseValues.RowVersion;
             }
-            catch (DataException dex)
+            catch (DbUpdateException)
             {
                 command.SaveFailed = true;
-                //command.DataException = true;
+                command.UpdateException = true;
             }
-            catch (Exception e)
+            catch (DataException)
             {
                 command.SaveFailed = true;
-                //command.OtherException = true;
+                command.DataException = true;
+            }
+            catch (Exception)
+            {
+                command.SaveFailed = true;
+                command.OtherException = true;
+            }
+            catch (RetryLimitExceeded)
+            {
+                
+            }
+            finally
+            {
+                //ContextConfiguration.SuspendExecutionStrategy = true;
             }
 
 
@@ -139,21 +161,6 @@ namespace Proto.Domain.CommandHandlers.Tenant
             //command.RowGuid = tenant.RowGuid;
             //command.RowVersion = tenant.RowVersion;
             command.AccountNumber = tenant.AccountNumber;
-        }
-
-        private void HaveUserResolveConcurrency(
-            Model.Entities.Tenant entity,
-            Model.Entities.Tenant databaseValues,
-            Model.Entities.Tenant resolvedValues)
-        {
-            // Show the current, database, and resolved values to the user and have
-            // them update the resolved values to get the correct resolution.
-
-            //if (databaseValues.Name != resolvedValues.Name)
-            //    ModelState.AddModelError("Name", "Current value: "
-            //        + databaseValues.Name);
-
-            throw new NotImplementedException();
         }
     }
 }
